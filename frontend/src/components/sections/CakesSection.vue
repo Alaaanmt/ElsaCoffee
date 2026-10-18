@@ -1,40 +1,61 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { PhArrowRight, PhCaretLeft, PhCaretRight } from '@phosphor-icons/vue'
+import {
+  PhArrowRight,
+  PhCaretLeft,
+  PhCaretRight,
+} from '@phosphor-icons/vue'
+
+// Importación de Swiper
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Navigation, FreeMode } from 'swiper/modules'
+import type { Swiper as SwiperType } from 'swiper'
+
+import 'swiper/css'
+import 'swiper/css/free-mode'
+
 import FadeInObserver from '@/components/ui/FadeInObserver.vue'
 import { tortasCompletas } from '@/data/cakes'
 
 const router = useRouter()
-const scrollContainer = ref<HTMLElement | null>(null)
+const modules = [Navigation, FreeMode]
+const swiperInstance = ref<SwiperType | null>(null)
 
-const idsDestacados = ['matilda', 'torta-patagonica', 'crumble-manzana', 'elsa']
-const tortasDestacadas = computed(() => {
-  return tortasCompletas.filter(torta => idsDestacados.includes(torta.id))
-})
+const tortasDestacadas = tortasCompletas
+
+const onSwiper = (swiper: SwiperType) => {
+  swiperInstance.value = swiper
+}
 
 const irACarta = () => {
   router.push('/tortas')
 }
 
 const scroll = (direction: 'left' | 'right') => {
-  scrollContainer.value?.scrollBy({
-    left: direction === 'left' ? -310 : 310,
-    behavior: 'smooth',
-  })
+  if (!swiperInstance.value) return
+  if (direction === 'left') {
+    swiperInstance.value.slidePrev()
+  } else {
+    swiperInstance.value.slideNext()
+  }
 }
 </script>
 
 <template>
   <section
     id="tortas"
-    class="overflow-hidden border-y border-borde-suave bg-superficie px-5 py-24 transition-colors duration-500 sm:px-8 md:py-36"
+    class="border-y border-borde-suave bg-superficie py-20 transition-colors duration-500 md:py-28"
   >
+    <!-- Contenedor alineado con el resto del sitio -->
     <div class="mx-auto max-w-7xl px-5 sm:px-8">
       <FadeInObserver>
-        <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          <!-- Presentación -->
-          <div class="space-y-7 lg:col-span-4">
+        
+        <!-- Bloque Principal: desde md (tablet) se comporta como desktop -->
+        <div class="grid grid-cols-1 gap-10 md:flex md:flex-col md:items-center md:text-center">
+          
+          <!-- Presentación: centrada desde tablet (md:) -->
+          <div class="space-y-6 md:max-w-3xl">
             <div>
               <span class="mb-4 block text-xs font-semibold uppercase tracking-[0.22em] text-verde-marca dark:text-acento">
                 Nuestras especialidades
@@ -43,29 +64,30 @@ const scroll = (direction: 'left' | 'right') => {
                 El arte de la <span class="font-normal italic">pastelería.</span>
               </h2>
             </div>
-
-            <p class="max-w-md font-cuerpo text-base leading-relaxed text-tinta-suave md:text-lg">
+            <p class="max-w-md font-cuerpo text-base leading-relaxed text-tinta-suave md:mx-auto md:text-lg">
               Tortas artesanales elaboradas con dedicación, para compartir algo especial en cada ocasión.
             </p>
+            <p class="text-sm text-tinta-suave">
+              Encargá tu torta con 48 horas de anticipación.
+            </p>
 
-            <p class="text-sm text-tinta-suave">Encargá tu torta con 48 horas de anticipación.</p>
-
-            <div class="flex flex-wrap items-center gap-4 pt-1">
+            <div class="flex flex-wrap items-center gap-4 pt-1 md:justify-center">
               <button
                 type="button"
                 @click="irACarta"
-                class="cursor-pointer group inline-flex items-center gap-3 rounded-full bg-verde-marca px-6 py-3.5 text-sm font-semibold text-crema shadow-sm transition-all hover:bg-acento hover:text-verde-marca"
+                class="group inline-flex cursor-pointer items-center gap-3 rounded-full bg-verde-marca px-6 py-3.5 text-sm font-semibold text-crema shadow-sm transition-all hover:bg-acento hover:text-verde-marca"
               >
                 <span>Descubrir las tortas</span>
                 <PhArrowRight :size="17" weight="bold" class="transition-transform group-hover:translate-x-1" />
               </button>
 
-              <div class="flex items-center gap-2">
+              <!-- Flechitas de navegación: oculta en mobile (hidden), visibles desde sm (sm:flex) -->
+              <div class="hidden items-center gap-2 sm:flex">
                 <button
                   type="button"
                   aria-label="Ver tortas anteriores"
                   @click="scroll('left')"
-                  class="cursor-pointer flex size-10 items-center justify-center rounded-full border border-borde-suave bg-fondo text-tinta transition-colors hover:border-verde-marca dark:hover:border-acento"
+                  class="flex size-10 cursor-pointer items-center justify-center rounded-full border border-borde-suave bg-fondo text-tinta transition-colors hover:border-verde-marca dark:hover:border-acento"
                 >
                   <PhCaretLeft :size="19" weight="bold" />
                 </button>
@@ -73,7 +95,7 @@ const scroll = (direction: 'left' | 'right') => {
                   type="button"
                   aria-label="Ver más tortas"
                   @click="scroll('right')"
-                  class="cursor-pointer flex size-10 items-center justify-center rounded-full border border-borde-suave bg-fondo text-tinta transition-colors hover:border-verde-marca dark:hover:border-acento"
+                  class="flex size-10 cursor-pointer items-center justify-center rounded-full border border-borde-suave bg-fondo text-tinta transition-colors hover:border-verde-marca dark:hover:border-acento"
                 >
                   <PhCaretRight :size="19" weight="bold" />
                 </button>
@@ -81,60 +103,96 @@ const scroll = (direction: 'left' | 'right') => {
             </div>
           </div>
 
-          <!-- Fotografías destacadas-->
-          <div class="min-w-0 lg:col-span-8">
-            <div
-              ref="scrollContainer"
-              class="scrollbar-none flex snap-x snap-mandatory items-start gap-5 overflow-x-auto pb-3"
+          <!-- Video de la Torta -->
+          <div class="min-w-0 md:order-3 md:w-full md:pt-6">
+            <button
+              type="button"
+              @click="irACarta"
+              aria-label="Descubrir nuestras tortas"
+              class="group relative block w-full cursor-pointer overflow-hidden rounded-3xl bg-fondo text-left shadow-sm"
             >
-              <button
+              <video
+                src="/media/video-torta.mp4"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label="Vista de una torta artesanal desde distintos ángulos"
+                class="aspect-[5/4] w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02] sm:aspect-[16/9] lg:aspect-[21/9]"
+              >
+                Tu navegador no admite la reproducción de video.
+              </video>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-transparent"></div>
+              <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8">
+                <span class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
+                  Hecho con dedicación
+                </span>
+                <h3 class="font-titulo text-2xl font-semibold text-white sm:text-4xl">
+                  Un antojo que se disfruta con la mirada.
+                </h3>
+              </div>
+            </button>
+          </div>
+
+          <!-- Carrusel Swiper de Tortas -->
+          <div class="min-w-0 md:order-2 md:w-full md:pt-4">
+            <Swiper
+              :modules="modules"
+              :slides-per-view="'auto'"
+              :space-between="20"
+              :free-mode="true"
+              :grab-cursor="true"
+              @swiper="onSwiper"
+              class="w-full !pb-2"
+            >
+              <SwiperSlide
                 v-for="torta in tortasDestacadas"
                 :key="torta.id"
-                type="button"
-                @click="irACarta"
-                :aria-label="`Conocer ${torta.nombre}`"
-                class="group w-[76%] shrink-0 snap-start text-left sm:w-[46%] lg:w-[calc(50%-10px)]"
+                class="!w-[76%] sm:!w-[46%] md:!w-[32%] lg:!w-[28%]"
               >
-                <div class="cursor-pointer relative aspect-[4/5] overflow-hidden rounded-2xl bg-fondo">
-                  <img
-                    :src="torta.imagen"
-                    :alt="torta.nombre"
-                    loading="lazy"
-                    class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                  <!-- Degradado sutil para integrar el título -->
-                  <div
-                    class="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-100"
-                  ></div>
-
-                  <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                    <h3 class="font-titulo text-2xl font-semibold text-white sm:text-3xl">
-                      {{ torta.nombre }}
-                    </h3>
-                    <div
-                      class="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/90 opacity-100 transition-all duration-300 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
-                    >
-                      <span>Descubrir</span>
-                      <PhArrowRight :size="15" weight="bold" />
+                <button
+                  type="button"
+                  @click="irACarta"
+                  :aria-label="`Conocer ${torta.nombre}`"
+                  class="group w-full text-left"
+                >
+                  <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-fondo">
+                    <img
+                      :src="torta.imagen"
+                      :alt="torta.nombre"
+                      loading="lazy"
+                      class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent"></div>
+                    <div class="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                      <h3 class="font-titulo text-2xl font-semibold text-white sm:text-3xl">
+                        {{ torta.nombre }}
+                      </h3>
+                      <div class="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/90 sm:translate-y-2 sm:opacity-0 sm:transition-all sm:duration-300 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
+                        <span>Descubrir</span>
+                        <PhArrowRight :size="15" weight="bold" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </button>
-            </div>
-            <p class="mt-3 text-right text-xs text-tinta-suave sm:hidden">Deslizá para descubrir más</p>
+                </button>
+              </SwiperSlide>
+            </Swiper>
+            
+            <p class="mt-3 text-center text-xs text-tinta-suave">
+              Deslizá o arrastrá para descubrir más
+            </p>
           </div>
+
         </div>
+
       </FadeInObserver>
     </div>
   </section>
 </template>
 
 <style scoped>
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.swiper {
+  overflow: hidden;
 }
 </style>

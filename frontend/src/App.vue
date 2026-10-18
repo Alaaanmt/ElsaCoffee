@@ -12,11 +12,11 @@ const route = useRoute()
 const { iniciarTema } = useTheme()
 
 const esVistaCheckout = computed(() => {
-  return route.path.startsWith('/checkout') || route.path.startsWith('/admin')
+  return route.path.startsWith('/checkout') || route.path.startsWith('/admin') || route.path.startsWith('/terminos') || route.path.startsWith('/politica')
 })
 
 const esVistaAdmin = computed(() =>{
-  return route.path.startsWith('/admin')
+  return route.path.startsWith('/admin') || route.path.startsWith('/terminos') || route.path.startsWith('/politica')
 })
 
 onMounted(() => {

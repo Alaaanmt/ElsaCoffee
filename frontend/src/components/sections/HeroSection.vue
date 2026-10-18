@@ -44,7 +44,7 @@ const scrollToSection = (id: string) => {
         aria-hidden="true"
         class="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity duration-1000"
       >
-        <source src="/media/video-landing.mp4" type="video/mp4" />
+        <source src="/media/video-landing-.mp4" type="video/mp4" />
       </video>
 
       <!-- Overlay oscuro translúcido para contraste de WCAG AA -->

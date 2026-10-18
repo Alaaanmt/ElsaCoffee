@@ -1,4 +1,3 @@
-<!-- src/components/layout/Footer.vue -->
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { PhInstagramLogo, PhWhatsappLogo, PhHeart } from '@phosphor-icons/vue'
@@ -42,7 +41,7 @@ const scrollToSection = async (id: string) => {
           </p>
         </div>
 
-        <!-- Columna 2: Navegación Principal (Grilla de 2 columnas en Mobile para optimizar espacio) -->
+        <!-- Columna 2: Navegación Principal -->
         <div class="md:col-span-4 space-y-4">
           <h4 class="font-titulo text-xs uppercase tracking-[0.2em] font-semibold text-verde-marca dark:text-acento">
             Navegación
@@ -111,9 +110,21 @@ const scrollToSection = async (id: string) => {
 
       </div>
 
-      <!-- Copyright Inferior Adaptado -->
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-tinta-suave gap-3 text-center sm:text-left">
+      <!-- Copyright Inferior y Enlaces Legales -->
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-tinta-suave gap-4 text-center md:text-left">
         <p>&copy; 2026 ELSA Coffee BA. Todos los derechos reservados.</p>
+        
+        <!-- Enlaces Legales -->
+        <div class="flex items-center gap-4 text-xs font-medium">
+          <router-link to="/terminos-y-condiciones" class="hover:text-acento transition-colors">
+            Términos y Condiciones
+          </router-link>
+          <span class="text-borde-suave">•</span>
+          <router-link to="/politica-de-privacidad" class="hover:text-acento transition-colors">
+            Política de Privacidad
+          </router-link>
+        </div>
+
         <p class="font-mono flex items-center justify-center gap-1.5 text-tinta-suave/80">
           <span>Hecho con dedicación y café</span>
           <PhHeart :size="14" weight="fill" class="text-verde-marca dark:text-acento inline" />

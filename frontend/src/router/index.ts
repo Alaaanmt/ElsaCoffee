@@ -8,6 +8,8 @@ import AdminOrders from '@/views/AdminOrders.vue'
 import { useCart } from '@/composables/useCart'
 import { useCheckout } from '@/composables/useCheckout'
 import { validarNombreApellido, validarEmail, limpiarYValidarTelefono } from '@/utils/validators'
+import TermsConditionsView from '@/views/TermsConditionsView.vue'
+import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,16 @@ const router = createRouter({
       name: 'admin-pedidos',
       component: AdminOrders,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/terminos-y-condiciones',
+      name: 'terminos-y-condiciones',
+      component: TermsConditionsView
+    },
+    {
+      path: '/politica-de-privacidad',
+      name: 'politica-de-privacidad',
+      component: PrivacyPolicyView
     },
     {
       path: '/:pathMatch(.*)*',

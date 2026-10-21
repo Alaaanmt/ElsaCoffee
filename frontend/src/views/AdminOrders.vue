@@ -109,7 +109,7 @@ const guardarCambiosModal = (cambios: { estadoPedido: EstadoPedido; estadoPago: 
         :pedidos-paginados="pedidosPaginados"
         :pagina-actual="paginaActual"
         :total-paginas="totalPaginas"
-        @avanzar-estado="avanzarEstadoContextual"
+        @avanzar-estado="(order) => avanzarEstadoContextual(order.id)"
         @ver-detalle="abrirModalDetalle"
         @cambiar-pagina="cambiarPagina"
       />

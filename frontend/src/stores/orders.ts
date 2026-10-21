@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { MOCK_ORDERS } from '@/data/mockOrders'
 import type { OrderMock, EstadoPedido, EstadoPago } from '@/types/order'
 

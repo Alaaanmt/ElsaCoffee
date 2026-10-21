@@ -2,7 +2,7 @@
 import { useCart } from '@/composables/useCart'
 import { PhX, PhShoppingCart } from '@phosphor-icons/vue'
 
-const { showToast, latestAddedItem, totalItems, formattedTotalPrice, isCartOpen, showToast: toggleToast } = useCart()
+const { showToast, latestAddedItem, totalItems, formattedTotalPrice, isCartOpen} = useCart()
 
 const abrirCarritoDrawer = () => {
   showToast.value = false

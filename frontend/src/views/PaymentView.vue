@@ -4,11 +4,9 @@ import { useRouter } from 'vue-router'
 import { useCart } from '@/composables/useCart'
 import { useCheckout } from '@/composables/useCheckout'
 import { useOrdersStore } from '@/stores/orders'
-import { PhArrowLeft, PhShieldCheck, PhCheckCircle, PhUser, PhEnvelope, PhPhone, PhStorefront, PhTruck, PhWarning, PhCopy, PhWhatsappLogo } from '@phosphor-icons/vue'
-import { useTheme } from '@/composables/useTheme'
+import { PhArrowLeft, PhShieldCheck, PhCheckCircle, PhStorefront, PhTruck, PhCopy, PhWhatsappLogo } from '@phosphor-icons/vue'
 import { negocio } from '@/data/business'
 
-const { tema } = useTheme()
 const router = useRouter()
 const { cartItems, formattedTotalPrice } = useCart()
 const { tipoEntrega, costoEnvio, datosCliente, sucursalRetiro, fechaSeleccionada, turnoSeleccionado, metodoPagoSeleccionado } = useCheckout()

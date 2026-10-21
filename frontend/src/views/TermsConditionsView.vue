@@ -148,7 +148,7 @@ const volverAtras = () => {
             los derechos que la normativa de protección al consumidor reconoce a los usuarios.</p>
         </section>
 
-        <section class="space-y-3 pt-2 border-t border-borde-suave pt-6">
+        <section class="space-y-3 pt-2 border-t border-borde-suave">
           <h2 class="font-titulo text-xl font-semibold text-tinta">12. Contacto</h2>
           <p class="text-sm">Para realizar consultas sobre estos términos o sobre un pedido, el usuario podrá
             comunicarse mediante los datos de contacto publicados en el sitio web.</p>

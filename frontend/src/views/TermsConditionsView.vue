@@ -16,7 +16,6 @@ const volverAtras = () => {
     <FadeInObserver>
       <!-- Encabezado con Botón Volver y Logo Elsa -->
       <div class="mb-10 relative flex items-center justify-center pb-6 border-b border-borde-suave">
-        <!-- Botón de Volver posicionado a la izquierda centrado verticalmente -->
         <button @click="volverAtras"
           class="absolute left-0 inline-flex items-center gap-2 text-sm font-medium text-tinta-suave hover:text-acento transition-colors cursor-pointer">
           <PhArrowLeft :size="18" weight="bold" />

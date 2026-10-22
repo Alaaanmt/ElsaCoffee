@@ -5,10 +5,12 @@ import logoOscuro from '@/assets/img/logo-elsa.png'
 
 interface Props {
   variant?: 'normal' | 'sobre-hero'
+  blancoSobreHero?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
-  variant: 'normal'
+const props = withDefaults(defineProps<Props>(), {
+  variant: 'normal',
+  blancoSobreHero: false
 })
 
 const { tema } = useTheme()
@@ -16,14 +18,11 @@ const { tema } = useTheme()
 
 <template>
   <RouterLink to="/" class="group inline-flex items-center gap-3 transition-opacity hover:opacity-90">
-    <div class="relative h-10 w-36 overflow-hidden rounded-md sm:h-12 sm:w-44 flex items-center  ">
+    <div class="relative h-10 w-36 overflow-hidden rounded-md sm:h-12 sm:w-44 flex items-center">
       <img
-        :src="tema === 'oscuro' ? logoBlanco : logoOscuro"
+        :src="(tema === 'oscuro' || props.blancoSobreHero) ? logoBlanco : logoOscuro"
         alt="ELSA Coffee BA"
         class="h-32 w-full object-contain object-left transition-all duration-300"
-        :class="[
-          tema === 'oscuro' && variant !== 'sobre-hero' ? '' : ''
-        ]"
       />
     </div>
   </RouterLink>

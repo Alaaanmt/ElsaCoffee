@@ -12,17 +12,13 @@ const { cartItems, formattedTotalPrice } = useCart()
 const { tipoEntrega, costoEnvio, datosCliente, sucursalRetiro, fechaSeleccionada, turnoSeleccionado, metodoPagoSeleccionado } = useCheckout()
 const ordersStore = useOrdersStore()
 
-
 const procesandoPago = ref(false)
 const pagoExitoso = ref(false)
 const numeroPedido = ref(0)
 const textoCopiado = ref(false)
-
-
 const itemsRespaldo = ref<any[]>([])
 const totalFinalRespaldo = ref('')
 const subtotalRespaldo = ref('')
-
 const errorMessage = ref('')
 const errorBoxRef = ref<HTMLElement | null>(null)
 
@@ -45,6 +41,7 @@ const generarMensajePedido = () => {
   }).join('\n')
 
   const fechaFormateada = new Date(fechaSeleccionada.value).toLocaleDateString('es-AR', {
+    timeZone: 'America/Argentina/Buenos_Aires',
     weekday: 'short',
     day: 'numeric',
     month: 'short'
@@ -68,29 +65,27 @@ const generarMensajePedido = () => {
 const handlePagar = () => {
   errorMessage.value = ''
   procesandoPago.value = true
-
   itemsRespaldo.value = [...cartItems.value]
+
   const subtotalNum = cartItems.value.reduce((sum, item) => sum + (item.precioNum * item.cantidad), 0)
   const totalNum = calcularTotalConEnvioNum()
 
-  // Formateamos la fecha a YYYY-MM-DD para compatibilidad con el Admin
   const fechaObj = fechaSeleccionada.value ? new Date(fechaSeleccionada.value) : new Date()
-  const fechaStr = fechaObj.toISOString().split('T')[0] as string
+  const fechaStr = fechaObj.toLocaleDateString('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' })
 
-  //CREAMOS EL PEDIDO EN LA STORE GLOBAL (Pinia + LocalStorage)
   const pedidoCreado = ordersStore.crearPedido({
     nombreCliente: datosCliente.nombre,
     apellidoCliente: datosCliente.apellido,
     emailCliente: datosCliente.email,
     telefonoCliente: datosCliente.telefono,
-    tipoEntrega: tipoEntrega.value, // 'retiro' | 'envio'
+    tipoEntrega: tipoEntrega.value,
     calleEnvio: datosCliente.calle || '',
     numeroEnvio: datosCliente.numero || '',
     ciudadEnvio: datosCliente.ciudad || '',
     costoEnvio: costoEnvio.value,
     subtotal: subtotalNum,
     totalFinal: totalNum,
-    metodoPago: metodoPagoSeleccionado.value, // 'mercadopago' | 'transferencia' | 'efectivo'
+    metodoPago: metodoPagoSeleccionado.value,
     estadoPago: metodoPagoSeleccionado.value === 'mercadopago' ? 'PAGADO' : 'PENDIENTE',
     estadoPedido: 'NUEVO',
     fechaTurno: fechaStr,
@@ -105,16 +100,14 @@ const handlePagar = () => {
     }))
   })
 
-  // Guardamos el número de pedido autogenerado (#1041, #1042, etc.)
   numeroPedido.value = pedidoCreado.numeroPedido
-
   totalFinalRespaldo.value = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(totalNum)
   subtotalRespaldo.value = formattedTotalPrice.value
 
   setTimeout(() => {
     procesandoPago.value = false
     pagoExitoso.value = true
-    cartItems.value = [] // Vaciar el carrito
+    cartItems.value = []
   }, 1000)
 }
 
@@ -129,10 +122,11 @@ const copiarDatosPedido = () => {
   const mensaje = generarMensajePedido()
   navigator.clipboard.writeText(mensaje)
   textoCopiado.value = true
-  setTimeout(() => { textoCopiado.value = false }, 3000)
+  setTimeout(() => {
+    textoCopiado.value = false
+  }, 3000)
 }
 </script>
-
 <template>
   <div class="min-h-screen bg-fondo pt-28 pb-24 px-5 sm:px-8 transition-colors duration-300">
     <div class="max-w-4xl mx-auto space-y-8">
@@ -343,7 +337,7 @@ const copiarDatosPedido = () => {
               <div class="pt-3 space-y-1">
                 <span class="text-xs uppercase tracking-wider text-tinta-suave font-medium block">Fecha y Horario</span>
                 <p class="text-tinta font-medium capitalize">{{ new Date(fechaSeleccionada).toLocaleDateString('es-AR',
-                  { weekday: 'long', day: 'numeric', month: 'long' }) }} - Turno <span
+                  {timeZone: 'America/Argentina/Buenos_Aires', weekday: 'long', day: 'numeric', month: 'long' }) }} - Turno <span
                     class="uppercase font-mono text-verde-marca dark:text-acento font-bold">{{ turnoSeleccionado
                     }}</span></p>
               </div>

@@ -52,7 +52,7 @@ const emit = defineEmits<{
           </div>
           <p class="text-base font-semibold text-tinta-suave pt-1">
             <span v-for="(item, idx) in order.items" :key="item.id" class="text-tinta font-bold">{{ item.nombreProducto
-              }} × {{ item.cantidad }}<span v-if="idx < order.items.length - 1">, </span></span>
+            }} × {{ item.cantidad }}<span v-if="idx < order.items.length - 1">, </span></span>
           </p>
         </div>
 
@@ -76,8 +76,8 @@ const emit = defineEmits<{
             <PhCalendarBlank :size="20" class="text-verde-marca dark:text-acento shrink-0" />
             <span class="font-semibold text-tinta">Entrega:</span>
             <span class="capitalize">{{ new Date(order.fechaTurno).toLocaleDateString('es-AR', {
-              weekday: 'long', day:
-                'numeric', month: 'long' }) }}</span>
+              timeZone: 'UTC',
+              weekday: 'long', day: 'numeric', month: 'long' }) }}</span>
             <span class="capitalize font-mono font-bold text-verde-marca dark:text-acento">({{ order.turno }})</span>
           </div>
           <div class="flex items-center gap-2">

@@ -42,15 +42,16 @@ export function useCheckout() {
     }
   }
 
-  const fechaFormateadaTexto = computed(() => {
-    const fecha = new Date(fechaSeleccionada.value)
-    return fecha.toLocaleDateString('es-AR', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    })
+ const fechaFormateadaTexto = computed(() => {
+  const fecha = new Date(fechaSeleccionada.value)
+  return fecha.toLocaleDateString('es-AR', { 
+    timeZone: 'America/Argentina/Buenos_Aires',
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
   })
+})
 
   return {
     tipoEntrega,

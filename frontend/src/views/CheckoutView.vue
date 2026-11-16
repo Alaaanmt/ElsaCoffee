@@ -46,12 +46,22 @@ const diasDelMes = computed(() => {
   for (let i = 0; i < diaSemanaInicio; i++) {
     dias.push({ esVacio: true, id: `vacio-${i}` })
   }
+
   for (let d = 1; d <= totalDias; d++) {
-    const fechaDia = new Date(anio, mes, d)
-    fechaDia.setHours(0, 0, 0, 0)
-    const esBloqueado = fechaDia < fechaMinima
-    dias.push({ esVacio: false, diaNum: d, fecha: fechaDia, bloqueado: esBloqueado })
+    const fechaDia = new Date(anio, mes, d, 12, 0, 0, 0)
+    
+    const fechaComparacion = new Date(anio, mes, d)
+    fechaComparacion.setHours(0, 0, 0, 0)
+    const esBloqueado = fechaComparacion < fechaMinima
+
+    dias.push({ 
+      esVacio: false, 
+      diaNum: d, 
+      fecha: fechaDia, 
+      bloqueado: esBloqueado 
+    })
   }
+
   return dias
 })
 

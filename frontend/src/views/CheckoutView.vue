@@ -12,6 +12,7 @@ const { totalPrice } = useCart()
 const { costoEnvio, fechaSeleccionada, turnoSeleccionado, datosCliente, fechaFormateadaTexto } = useCheckout()
 
 const totalConEnvioNum = computed(() => totalPrice.value + costoEnvio.value)
+
 const formattedTotalConEnvio = computed(() => {
   return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(totalConEnvioNum.value)
 })
@@ -27,11 +28,14 @@ fechaMinima.setDate(hoy.getDate() + 2)
 fechaMinima.setHours(0, 0, 0, 0)
 
 if (!fechaSeleccionada.value || new Date(fechaSeleccionada.value) < fechaMinima) {
-  fechaSeleccionada.value = new Date(fechaMinima)
+  const fechaDef = new Date(fechaMinima)
+  fechaDef.setHours(12, 0, 0, 0)
+  fechaSeleccionada.value = fechaDef
 }
 
 const mesActual = ref(new Date(fechaSeleccionada.value).getMonth())
 const anioActual = ref(new Date(fechaSeleccionada.value).getFullYear())
+
 const nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
 const diasDelMes = computed(() => {
@@ -52,6 +56,7 @@ const diasDelMes = computed(() => {
     
     const fechaComparacion = new Date(anio, mes, d)
     fechaComparacion.setHours(0, 0, 0, 0)
+    
     const esBloqueado = fechaComparacion < fechaMinima
 
     dias.push({ 
@@ -68,8 +73,15 @@ const diasDelMes = computed(() => {
 const cambiarMes = (direccion: number) => {
   let nuevoMes = mesActual.value + direccion
   let nuevoAnio = anioActual.value
-  if (nuevoMes > 11) { nuevoMes = 0; nuevoAnio++ } else if (nuevoMes < 0) { nuevoMes = 11; nuevoAnio-- }
+
+  if (nuevoMes > 11) {
+    nuevoMes = 0; nuevoAnio++
+  } else if (nuevoMes < 0) {
+    nuevoMes = 11; nuevoAnio--
+  }
+
   if (nuevoAnio < hoy.getFullYear() || (nuevoAnio === hoy.getFullYear() && nuevoMes < hoy.getMonth())) return
+
   mesActual.value = nuevoMes
   anioActual.value = nuevoAnio
 }
@@ -103,6 +115,7 @@ const mostrarError = (mensaje: string) => {
 
 const validarYContinuarAPago = () => {
   errorMessage.value = ''
+
   if (!validarNombreApellido(datosCliente.nombre, datosCliente.apellido)) {
     mostrarError('Por favor, completá tu nombre y apellido.')
     return
@@ -115,6 +128,7 @@ const validarYContinuarAPago = () => {
     mostrarError('El teléfono debe incluir característica y número (ej: 11 23456789).')
     return
   }
+
   router.push('/checkout/payment')
 }
 </script>
